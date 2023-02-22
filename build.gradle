@@ -4,7 +4,7 @@ plugins {
 
 
 group = 'com.github.devmeup'
-version = '0.0.1'
+version = '0.0.1-1.19.3'
 
 java {
     archivesBaseName = 'wondersoftheancients'
@@ -51,6 +51,10 @@ minecraft {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'wonders-of-the-ancients'
 
+            //You have to set mixin propert if you want to run playerAnimator in development environment.
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
                 wondersoftheancients {
                     source sourceSets.main
@@ -66,6 +70,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             property 'forge.enabledGameTestNamespaces', 'wonders-of-the-ancients'
+
+            //Add this to the server too.
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
                 wondersoftheancients {
@@ -123,6 +131,13 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+
+    maven {
+        name "KosmX's maven"
+        url 'https://maven.kosmx.dev/'
+    }
 }
 
 dependencies {
@@ -142,6 +157,11 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    //If you don't want to include the library in your jar, remove the include word
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19.3:4.0.4')
+
+    implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${project.player_anim}")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
